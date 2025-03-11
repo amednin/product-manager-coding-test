@@ -12,7 +12,7 @@ interface NewProduct {
   available: boolean;
 }
 
-interface Filters {
+export interface Filters {
   sortBy: string;
   search: string;
 }
@@ -24,7 +24,6 @@ const useProducts = (initialFilters: Filters) => {
   useEffect(() => {
     fetchProducts();
   }, [filters]);
-
   const fetchProducts = () => {
     // TODO: Abstract api endpoint to an env variable (for versioning purpose or so)
     let query = `http://localhost:3000/products?`;
@@ -73,4 +72,3 @@ const useProducts = (initialFilters: Filters) => {
 };
 
 export default useProducts;
-

@@ -1,15 +1,23 @@
-import React from 'react';
-import { Container } from '@mui/material';
-import FilterSortForm from './components/FilterSortForm';
-import ProductTable from './components/ProductTable';
-import useProducts from './hooks/useProducts';
+import React from "react";
+import { Container } from "@mui/material";
+import FilterSortForm from "./components/FilterSortForm";
+import ProductTable from "./components/ProductTable";
+import useProducts from "./hooks/useProducts";
 
 const ListProductsPage: React.FC = () => {
-  const { products, filters, setFilters } = useProducts({ sortBy: '', search: '' });
+  const { products, filters, setFilters, deleteProduct } = useProducts({
+    sortBy: "",
+    search: "",
+  });
 
+  // TODO: Improve UX by adding a function like debounce
   const handleFilterChange = (e: any) => {
     const { name, value } = e.target;
     setFilters({ ...filters, [name]: value });
+  };
+
+  const handleDeleteProduct = (productId) => {
+    deleteProduct(productId);
   };
 
   return (
@@ -20,7 +28,7 @@ const ListProductsPage: React.FC = () => {
       />
       <ProductTable
         products={products}
-        handleDeleteProduct={() => {}}
+        handleDeleteProduct={handleDeleteProduct}
       />
     </Container>
   );

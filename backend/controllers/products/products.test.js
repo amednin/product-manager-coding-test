@@ -1,7 +1,22 @@
-const mockDb = require("../../db/products");
-const { filterProducts } = require("./");
+let mockDb = require("../../db/products");
+const initialMockDb = [
+  { id: 1, name: "Fries", available: true },
+  { id: 2, name: "Big Mac", available: true },
+  { id: 3, name: "Drink", available: false },
+  { id: 4, name: "6 pc. McNuggets", available: true },
+  { id: 5, name: "12 pc. McNuggets", available: false },
+  { id: 6, name: "(New) Cheeseburger", available: false },
+  { id: 7, name: "Sundae", available: true },
+];
+
+jest.mock("../../db/products", () => initialMockDb);
+const { filterProducts, deleteProduct } = require("./");
 
 describe("Products controller:", () => {
+  beforeEach(() => {
+    mockDb = initialMockDb;
+  });
+
   test("filterProducts: empty params", () => {
     const products = filterProducts({});
 
@@ -40,5 +55,17 @@ describe("Products controller:", () => {
     const products4 = filterProducts({ searchText: "(new Chee" });
 
     expect(products4.length).toBe(0);
+  });
+
+  test("deleteProduct: delete existing product from the list", () => {
+    const success = deleteProduct({ id: 1 });
+
+    expect(success).toBe(true);
+  });
+
+  test("deleteProduct: cannot found a product with the requested id", () => {
+    const success = deleteProduct({ id: -1 });
+
+    expect(success).toBe(null);
   });
 });

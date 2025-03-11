@@ -1,7 +1,11 @@
 const express = require("express");
 const router = express.Router({ mergeParams: true });
-const mockDb = require("../../db/products");
-const { filterProducts } = require("../../controllers/products");
+let mockDb = require("../../db/products");
+const {
+  filterProducts,
+  deleteProduct,
+  addProduct,
+} = require("../../controllers/products");
 
 router.get("/", (req, res) => {
   const { available, sortBy, search } = req.query;
@@ -17,12 +21,7 @@ router.get("/", (req, res) => {
 
 // TODO: Implement and use a Controller here
 router.post("/", (req, res) => {
-  const newProduct = {
-    id: mockDb.length + 1,
-    name: req.body.name,
-    available: req.body.available || true,
-  };
-  mockDb.push(newProduct);
+  const newProduct = addProduct(req.body);
   res.status(201).json(newProduct);
 });
 
@@ -43,10 +42,17 @@ router.put("/:id", (req, res) => {
   res.json(product);
 });
 
-// TODO: Implement and use a Controller here
 router.delete("/:id", (req, res) => {
-  const productId = parseInt(req.params.id);
-  mockDb = mockDb.filter((p) => p.id !== productId);
+  const success = deleteProduct(req.params);
+
+  if (!success) {
+    // TODO: An improvement would be to send this info to a logger service
+    console.log(
+      "attempted to delete a non existing product with ID: ",
+      req.params.id,
+    );
+  }
+
   res.status(204).send();
 });
 
