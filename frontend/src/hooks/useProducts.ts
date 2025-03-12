@@ -7,7 +7,7 @@ interface Product {
   available: boolean;
 }
 
-interface NewProduct {
+export interface NewProduct {
   name: string;
   available: boolean;
 }

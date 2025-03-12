@@ -43,7 +43,7 @@ const addProduct = (params) => {
   const newProduct = {
     id: mockDb.length + 1,
     name: params.name,
-    available: params.available || true,
+    available: params.available,
   };
   mockDb.push(newProduct);
 
